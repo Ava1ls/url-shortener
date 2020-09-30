@@ -23,6 +23,7 @@ const PORT = process.env.PORT || 3000
 
 connectDb()
 
+
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development'){
     app.use(morgan('dev'))
