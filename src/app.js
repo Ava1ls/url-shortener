@@ -32,11 +32,11 @@ if (process.env.NODE_ENV === 'development'){
 
 //Loading routes files
 const urlshorter = require('./routes/urlShort')
-
+const auth = require('./routes/auth')
 
 //Mounting routes
 app.use('/', urlshorter)
-
+app.use('/auth', auth)
 
 //Static views folder
 app.use(express.static(__dirname + "/views"));

@@ -6,6 +6,10 @@ const User = require('../models/User')
 exports.protect = asyncHandler(async(req, res, next)=>{
     let token 
 
+    if (req.headers.authorization.startsWith('Bearer')){
+        console.log(true);
+    }
+
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){ 
         token = req.headers.authorization.split(' ').slice(1).toString()
         console.log(token);
