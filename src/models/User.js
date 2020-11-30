@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema({
         minlength: 6,
         select: false
     },
+    savedUrls:[],
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     createdAt:{
@@ -33,18 +34,20 @@ const UserSchema = new mongoose.Schema({
 
 // Encrypt password via bcrypt
 UserSchema.pre('save', async function(next){
-    if(!this.isModified('password')){
+    if(!this.isModified('password')) {
         next()
     }
     const salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt)
 })
 
-//Sign JSWT & return
-UserSchema.methods.getSignedJwtToken = function(){
+//Sign JWT & return
+UserSchema.methods.getSignedJwtToken = function() {
+
     return jwt.sign({id:this._id}, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRE
     })
+   
 }
 
 //Match the user-entered password to hashed password in db

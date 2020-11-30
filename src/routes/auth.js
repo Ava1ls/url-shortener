@@ -10,7 +10,7 @@ router.post('/login', login)
 router.get('/me', protect, getMe)
 //router.post('/forgotpassword', forgotPassword)
 //router.put('/resetpassword/:id', protect, resetPassword)
-router.put('/updatedetails', updateDetails)
-router.put('/updatepassword', protect, updatePassword)
+//router.put('/updatedetails', updateDetails)
+//router.put('/updatepassword', protect, updatePassword)
 
 module.exports = router

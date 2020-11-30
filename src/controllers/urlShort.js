@@ -3,6 +3,8 @@ const validUrl = require('valid-url')
 const dotenv = require('dotenv')
 const AsyncHandler = require('../middleware/asyncHandler')
 const Url = require('../models/Url')
+const User = require('../models/User')
+
 
 // Load env vars
 dotenv.config({ path: '../configs/config.env' })
@@ -143,4 +145,13 @@ exports.createCustomUrl = AsyncHandler(async (req, res, next)=>{
       .status(400)
       .json('Invalid URL. Please enter a vlaid url for shortening.')
   }
+})
+
+
+// @method      PATCH
+// @desc        Push to user's saved url current url
+// @route       /
+// @access      Public
+exports.saveUrl = AsyncHandler(async(req, res, next)=>{
+  
 })

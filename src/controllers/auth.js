@@ -3,7 +3,10 @@ const sendEmail = require('../utils/sendEmail')
 const AsyncHandler = require('../middleware/asyncHandler')
 const ErrorHandler = require('../middleware/errorHandler')
 const crypto = require('crypto')
+const dotenv = require('dotenv')
 const ErrorResponse = require('../utils/errorResponse')
+dotenv.config({path: '../configs/config.env'})
+
 
 // @desc        Register new user
 // @route       POST /auth/register
@@ -14,8 +17,7 @@ exports.register = AsyncHandler(async(req, res, next)=>{
     const user = await User.create({
         name,
         email,
-        password,
-        role
+        password
     })
 
     sendTokenResponse(user, 201, res)
@@ -123,11 +125,9 @@ exports.updatePassword = AsyncHandler(async(req, res, next)=>{
 })
 
 
-
-
-
 const sendTokenResponse = (user, statusCode, res)=>{
     const token = user.getSignedJwtToken()
+    
     const options = {
         expires: new Date(Date.now()+process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
         httpOnly: true
@@ -138,6 +138,8 @@ const sendTokenResponse = (user, statusCode, res)=>{
         .cookie('token', token, options)
         .json({
             success: true,
-            token
+            token,
+            options
         })
+    console.log(process.env.JWT_COOKIE_EXPIRE);
 }
