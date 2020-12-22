@@ -8,6 +8,7 @@ const methodOverride = require('method-override')
 const dotenv = require('dotenv')
 const AsyncHandler = require('../middleware/asyncHandler')
 dotenv.config({ path: '../configs/config.env' })
+const User = require('../models/User')
 
 
 //App middlewares
@@ -20,6 +21,14 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+
+
+const initializePassport = require('../configs/passport-config')
+initializePassport(
+  passport,
+  email => User.findOne(user => user.email === email),
+  id => User.findOne(user => user.id === id)
+)
 
 
 //Functions for auth-check for users
@@ -46,12 +55,13 @@ var checkNotAuthenticated = AsyncHandler(async (req, res, next) =>{
 exports.registerUser = AsyncHandler(async (req, res, next) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
-    users.push({
-      id: Date.now().toString(),
+    
+    User.Save({
       name: req.body.name,
       email: req.body.email,
       password: hashedPassword
     })
+
     res.redirect('/login')
   } catch {
     res.redirect('/register')
@@ -64,7 +74,11 @@ exports.registerUser = AsyncHandler(async (req, res, next) => {
 // @route       /login
 // @access      Public
 exports.logInUser = AsyncHandler(async (req, res, next)=>{
-
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+  })
 })
 
 
